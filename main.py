@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-from urllib.request import Request, urlopen
 from os import listdir, getcwd, remove, fsdecode, mkdir
 from os.path import exists
+from urllib.request import Request, urlopen
 
 NAME = "MCL"
 VERSION = "0.0.1"
@@ -30,7 +30,9 @@ HELP_SCREEN = f"""{NAME} v{VERSION}
     """
 
 ERROR = "ERROR! Maybe you internet connection is off?"
-HDR = {'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Mobile Safari/537.36'}
+HDR = {
+    'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/92.0.4515.107 Mobile Safari/537.36'}
 SEARCH = "https://mavin.io/search?q="
 DECODE = "utf-8"
 OPEN = '"articleBody":'
@@ -47,7 +49,7 @@ def find(card, default=None):
     avg_price = ERROR
     low_price = ERROR
     high_price = ERROR
-   
+
     html = page.decode(DECODE)
     average_worth = html.find(OPEN)
     start_index = average_worth + len(OPEN)
@@ -76,13 +78,14 @@ def find(card, default=None):
     if not exists(f"{CWD}/{card}") and avg_price != ERROR:
         save = input("ASK! Save this data? [y/N] ")
 
-        if save == "y" or save == "Y" or save == "yes" or save == "Yes" or default != None:
-            open(f"{CWD}/cards/{card}", "w").write(f"{avg_price}i\n{low_price}\n{high_price}") 
+        if save == "y" or save == "Y" or save == "yes" or save == "Yes" or default is not None:
+            open(f"{CWD}/cards/{card}", "w").write(f"{avg_price}i\n{low_price}\n{high_price}")
 
     return [low_price, high_price, avg_price]
 
 
 def get(card):
+    card_data = 0
     if exists(f"{CWD}/cards/{card}"):
         card_data = open(f"{CWD}/cards/{card}", "r").read()
         print(card_data)
@@ -107,17 +110,17 @@ def update():
 def delete_loc(card):
     are_you_sure = input("ASK! Are you sure you want to delete that card's data? [y/N] ")
 
-    if are_you_sure == "y" or are_you_sure == "Y" or are_you_sure == "yes" or are_you_sure == "Yes" != None:
+    if are_you_sure == "y" or are_you_sure == "Y" or are_you_sure == "yes" or are_you_sure == "Yes":
         remove(f"{CWD}/cards/{card}")
 
 
 def wipe():
     are_you_sure = input("ASK! Are you sure you want to delete all your card data? [y/N] ")
 
-    if are_you_sure == "y" or are_you_sure == "Y" or are_you_sure == "yes" or are_you_sure == "Yes" != None:
+    if are_you_sure == "y" or are_you_sure == "Y" or are_you_sure == "yes" or are_you_sure == "Yes":
         for card in listdir(f"{CWD}/cards/"):
             remove(f"{CWD}/cards/{card}")
-    
+
         print("WIPED!")
 
 
